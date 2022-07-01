@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <header>
+  </header>
+  <body>
+    <h1>testuru</h1>
+    <button>big button damn</button>
+    <pre>
+    </pre>
+  </body>
+  <script src="https://www.google.com/recaptcha/api.js?render=<%= SITE_PUBLIC %>"></script>
+  <script>
+  const domButton = document.querySelector('button')
+  const domPre = document.querySelector('pre')
+  domButton.addEventListener('click', (e) => {
+    e.preventDefault()
+    grecaptcha.ready(function() {
+      grecaptcha.execute('<%= SITE_PUBLIC %>', {action: 'submit'}).then(function(token) {
+        const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token })
+        }
+        fetch('http://localhost:3000/getSmthg', requestOptions)
+          .then(response => response.json())
+          .then(json => domPre.innerText = JSON.stringify(json))
+      })
+    })
+  })
+  </script>
+</html>
